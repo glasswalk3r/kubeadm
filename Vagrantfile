@@ -18,6 +18,7 @@ Vagrant.configure('2') do |config|
     vb.customize ['modifyvm', :id, '--vram', 9]
     vb.customize ['modifyvm', :id, '--graphicscontroller', 'vmsvga']
     vb.check_guest_additions = false
+    vb.linked_clone = true
   end
 
   config.vm.provision 'shell', inline: 'dnf upgrade -y'
