@@ -36,6 +36,11 @@ Vagrant.configure('2') do |config|
     end
     s.vm.hostname = 'slave'
   end
+
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = 'role-kube.yml'
+    config_file = 'ansible.cfg'
+  end
 end
 
 # This software is copyright (c) 2022 of Alceu Rodrigues de Freitas Junior,
