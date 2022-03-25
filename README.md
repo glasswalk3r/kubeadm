@@ -1,6 +1,7 @@
-# glasswalk3r/kubeadm
+# kubeadm
 
-glasswalk3r/kubeadm based K8s cluster provisioned with Vagrant and Ansible.
+kubeadm based K8s cluster provisioned with Vagrant and Ansible to implement
+a studying environment.
 
 ## References
 
