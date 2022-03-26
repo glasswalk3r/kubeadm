@@ -1,11 +1,16 @@
 ---
-- name: Install Necessary Software
+- name: Setup kubeadm
   hosts: all
   become: 'yes'
+  vars:
+    kubeadm_version: 1.23.2-0  # also will be used for kubectl and kubelet
+    cri_o_version: '1.23'  # must match the kubectl version major and minor
+    os_considered: CentOS_8
+    cri_o_repo1: 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable'
+    cri_o_repo2: 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o'
   vars_files:
     - group_vars/all.yml
   roles:
-    # - role: runtime/{{ container_runtime }}-setup
     - role: common
 # - name: Setup Master node
 #   hosts: master

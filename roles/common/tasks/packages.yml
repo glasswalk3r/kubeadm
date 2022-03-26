@@ -12,8 +12,40 @@
 - name: Install kubeadm
   yum:
     name:
-      - kubeadm
+      - 'kubeadm-{{ kubeadm_version }}'
+      - 'kubectl-{{ kubeadm_version }}'
+      - 'kubelet-{{ kubeadm_version }}'
       - iproute-tc
       - bind-utils
+      - python3-dnf-plugin-versionlock
     state: present
     update_cache: 'yes'
+- name: Add CRIO Repo-1
+  yum_repository:
+    name: kubic-libcontainers-stable
+    description: 'Stable Releases of Upstream github.com/containers packages ({{ os_considered }})'
+    baseurl: '{{ cri_o_repo1 }}/{{ os_considered }}'
+    gpgkey: '{{ cri_o_repo1 }}/{{ os_considered }}/repodata/repomd.xml.key'
+    gpgcheck: 'yes'
+    enabled: 'yes'
+- name: Add CRIO Repo-2
+  yum_repository:
+    name: 'kubic-libcontainers-stable-cri-o_{{ cri_o_version }}'
+    description: 'devel:kubic:libcontainers:stable:cri-o:{{ cri_o_version }} ({{ os_considered }})'
+    baseurl: '{{ cri_o_repo2 }}:/{{ cri_o_version }}/{{ os_considered }}'
+    gpgkey: '{{ cri_o_repo2 }}:/{{ cri_o_version }}/{{ os_considered }}/repodata/repomd.xml.key'  # yamllint disable-line rule:line-length
+    gpgcheck: 'yes'
+    enabled: 'yes'
+- name: Install CRIO Runtime
+  yum:
+    name: cri-o
+    state: present
+    update_cache: 'yes'
+- name: Lock kubeadm version
+  ansible.builtin.command: /usr/bin/dnf versionlock kubeadm-*
+- name: Lock kubectl version
+  ansible.builtin.command: /usr/bin/dnf versionlock kubectl-*
+- name: Lock kubelet version
+  ansible.builtin.command: /usr/bin/dnf versionlock kubelet-*
+- name: Lock cri-o version
+  ansible.builtin.command: /usr/bin/dnf versionlock cri-o-*

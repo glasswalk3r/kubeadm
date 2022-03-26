@@ -22,7 +22,9 @@ def configure_os(config, master_ip, slave_ip)
   echo 'master #{master_ip}' >> /etc/hosts
   echo 'slave #{slave_ip}' >> /etc/hosts
   echo 'net.bridge.bridge-nf-call-iptables = 1' > /etc/sysctl.d/k8s.conf
+  echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.d/k8s.conf
   echo br_netfilter > /etc/modules-load.d/k8s.conf
+  echo overlay >> /etc/modules-load.d/k8s.conf
   mv -f /tmp/#{sysctl_cfg} /etc/sysctl.d
   sysctl --system
   SCRIPT
