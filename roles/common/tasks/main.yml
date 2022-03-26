@@ -9,24 +9,9 @@
     name: firewalld
     state: stopped
   ignore_errors: true
-- name: Add Kubernetes yum repository
-  yum_repository:
-    name: Kubernetes
-    description: Kubernetes repository
-    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
-    enabled: 'yes'
-    gpgcheck: 'yes'
-    gpgkey:
-      - https://packages.cloud.google.com/yum/doc/yum-key.gpg
-      - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-- name: Install kubeadm
-  yum:
-    name:
-      - kubeadm
-      - kubectl
-      - kubelet
-      - iproute-tc
-    state: present
+- name: Install required packages
+  include_tasks: packages.yml
+  run_once: 'yes'
 - name: Start service kubelet, if not started
   ansible.builtin.service:
     name: kubelet
