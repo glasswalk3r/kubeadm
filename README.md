@@ -17,7 +17,8 @@ a studying environment.
 
 ## References
 
-- [ansible-kubeadm](https://github.com/gaurav-gupta-gtm/ansible-kubeadm)
+- [Install kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+- [ansible-kubeadm](https://github.com/gaurav-gupta-gtm/ansible-kubeadm): borrowed several implementations
 - [Rocky Linux](https://rockylinux.org/)
 - [Virtualbox](https://www.virtualbox.org/)
 - [Vagrant](https://www.vagrantup.com/)
