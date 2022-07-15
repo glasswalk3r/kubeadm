@@ -12,6 +12,17 @@
 - name: Install required packages
   include_tasks: packages.yml
   run_once: 'yes'
+- name: Start CRI-O daemon
+  ansible.builtin.systemd:
+    state: started
+    daemon_reload: 'yes'
+    name: crio
+    enabled: 'yes'
+- name: Start systemd-modules-load
+  ansible.builtin.systemd:
+    state: started
+    name: systemd-modules-load
+    enabled: 'yes'
 - name: Start service kubelet, if not started
   ansible.builtin.service:
     name: kubelet
