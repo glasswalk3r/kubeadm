@@ -13,12 +13,8 @@ def configure_virtualbox(vbox)
   vbox.linked_clone = true
 end
 
-def configure_os(config, master_ip, slave_ip)
-  # faster than using Ansible
-  config.vm.provision 'shell', inline: 'dnf makecache && dnf upgrade -y'
-  sysctl_cfg = '70.ipv6.conf'
-
-  script = <<-SCRIPT
+def network_script(sysctl_cfg, master_ip, slave_ip)
+  <<-SCRIPT
   echo 'master #{master_ip}' >> /etc/hosts
   echo 'slave #{slave_ip}' >> /etc/hosts
   echo 'net.bridge.bridge-nf-call-iptables = 1' > /etc/sysctl.d/k8s.conf
@@ -28,7 +24,13 @@ def configure_os(config, master_ip, slave_ip)
   mv -f /tmp/#{sysctl_cfg} /etc/sysctl.d
   sysctl --system
   SCRIPT
+end
 
+def configure_os(config, master_ip, slave_ip)
+  # faster than using Ansible
+  config.vm.provision 'shell', inline: 'dnf makecache && dnf upgrade -y'
+  sysctl_cfg = '70.ipv6.conf'
+  script = network_script(sysctl_cfg, master_ip, slave_ip)
   config.vm.provision 'file', source: "config/#{sysctl_cfg}", destination: '/tmp/'
   config.vm.provision 'shell', inline: script
 end
